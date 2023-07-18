@@ -20,6 +20,8 @@
 package com.peasenet.mods.esp
 
 import com.peasenet.main.GavinsMod
+import com.peasenet.main.Settings
+import com.peasenet.config.EspConfig
 import com.peasenet.settings.SettingBuilder
 import com.peasenet.util.RenderUtils
 import com.peasenet.util.event.data.BlockEntityRender
@@ -40,9 +42,9 @@ class ModFurnaceEsp : EspMod(
     init {
         val colorSetting = SettingBuilder()
             .setTitle("gavinsmod.settings.esp.furnace.color")
-            .setColor(GavinsMod.espConfig.furnaceColor)
+            .setColor(config.furnaceColor)
             .buildColorSetting()
-        colorSetting.setCallback { espConfig.furnaceColor = colorSetting.color }
+        colorSetting.setCallback { config.furnaceColor = colorSetting.color }
         addSetting(colorSetting)
     }
 
@@ -60,6 +62,13 @@ class ModFurnaceEsp : EspMod(
         if (er.buffer == null) return
         if (er.entity !is FurnaceBlockEntity) return
         val box = Box(er.entity.pos)
-        RenderUtils.drawBox(er.stack, er.buffer, box, espConfig.furnaceColor, espConfig.alpha)
+        RenderUtils.drawBox(er.stack, er.buffer, box, config.furnaceColor, config.alpha)
+    }
+
+    companion object {
+	val config: EspConfig
+	get() {
+		return Settings.getConfig<EspConfig>("esp")
+	}
     }
 }
